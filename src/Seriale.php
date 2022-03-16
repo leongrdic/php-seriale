@@ -10,7 +10,7 @@ use Ramsey\Collection\AbstractCollection;
 class Seriale
 {
 
-    public function extract(object $object): string
+    public function extract(?object $object): string
     {
         return json_encode($this->extractor($object));
     }
@@ -50,7 +50,7 @@ class Seriale
     /**
      * @throws ReflectionException
      */
-    public function hydrate(string $class, string $extracted): object
+    public function hydrate(string $class, string $extracted): ?object
     {
         return $this->hydrator($class, json_decode($extracted, true));
     }
@@ -58,8 +58,10 @@ class Seriale
     /**
      * @throws ReflectionException
      */
-    private function hydrator(string|ReflectionClass $class, $value): object
+    private function hydrator(string|ReflectionClass $class, $value): ?object
     {
+        if($value === null) return null;
+
         if (is_string($class)) $class = new ReflectionClass($class);
 
         if ($class->isEnum()) { // type is enum
