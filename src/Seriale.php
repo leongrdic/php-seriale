@@ -29,7 +29,7 @@ class Seriale
 
         // object implements datetime interface, pull out the value needed for reinitialization
         if($value instanceof DateTimeInterface){
-            return $value->getTimestamp();
+            return $value->format('c');
         }
 
         // very likely an object that is a collection of objects
@@ -71,7 +71,7 @@ class Seriale
         // type implements datatimeinterface, we need to create the object from timestamp
         if($class->implementsInterface(DateTimeInterface::class)){
             $className = $class->name;
-            return $className::createFromFormat('U', $value);
+            return new $className($value);
         }
 
         // type is object collection
